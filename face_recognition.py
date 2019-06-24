@@ -7,6 +7,7 @@ Created on Sun May 26 22:12:15 2019
 """
 import cv2
 import pickle
+from preprocessing import TanTriggsPreprocessing
 
 
 def nothing(x):
@@ -47,10 +48,12 @@ class FaceRecognition:
     def start_interactive_session(self):
         cap = cv2.VideoCapture(0)
         createTrackbar()
+        preprocessing_algo = TanTriggsPreprocessing()
 
         while True:
             ret, frame = cap.read()
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # gray = preprocessing_algo.compute(gray)
 
             scale = cv2.getTrackbarPos("Scale", "Frame")
             neighbours = cv2.getTrackbarPos("Neighbours", "Frame")
@@ -82,7 +85,7 @@ class FaceRecognition:
             if key == 27:
                 break
 
-        id_, conf = recognizer.predict(cv2.resize(roi, (300, 300)))
+        id_, conf = self.recognizer.predict(cv2.resize(roi, (300, 300)))
         print(conf)
 
         cap.release()

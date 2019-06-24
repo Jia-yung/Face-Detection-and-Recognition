@@ -19,7 +19,7 @@ class TanTriggsPreprocessing:
         Xp = []
         for xi in X:
             Xp.append(self.extract(xi))
-        return Xp
+        return np.array(Xp, dtype='uint8')
 
     def extract(self, X):
         X = np.array(X, dtype=np.float32)
