@@ -8,6 +8,7 @@ Created on Sun May 26 22:12:15 2019
 import cv2
 import pickle
 from preprocessing import TanTriggsPreprocessing
+from collections import Counter
 
 
 def nothing(x):
@@ -38,6 +39,11 @@ class FaceRecognition:
         self.recognizer.read("trainner.yml2")
         self.labels = {}
         self.read_labels()
+        self.count = 0
+        self.people = []
+        self.temporary = []
+        self.toBeRemove = []
+        self.Removed = []
 
     def read_labels(self):
         with open("labels.pickle", 'rb') as f:
@@ -48,7 +54,7 @@ class FaceRecognition:
     def start_interactive_session(self):
         cap = cv2.VideoCapture(0)
         createTrackbar()
-        preprocessing_algo = TanTriggsPreprocessing()
+        #preprocessing_algo = TanTriggsPreprocessing()
 
         while True:
             ret, frame = cap.read()
@@ -67,15 +73,24 @@ class FaceRecognition:
                 id_, conf = self.recognizer.predict(
                     cv2.resize(roi, (300, 300)))
 
-                if conf <= 30000:
+                if conf <= 14000:
+                   
                     print(id_)
                     print(self.labels[id_])
                     name = self.labels[id_]
+                    
+                    self.temporary.append(name)
+                    print(Counter(self.people))
+              
                 else:
                     name = "unknown"
-
+                    
                 drawText(frame, name, x, y)
                 drawRectangle(frame, rect)
+                    
+            
+                        
+                
 
             image = cv2.resize(frame, (750, 500))
             cv2.imshow("Frame", image)
@@ -87,6 +102,19 @@ class FaceRecognition:
 
         id_, conf = self.recognizer.predict(cv2.resize(roi, (300, 300)))
         print(conf)
+        
+        
+#        for name in self.people:
+#            if (self.people.count(name)/len(self.people)) < 0.5:
+#                self.toBeRemove.append(name)
+#             
+#                
+#        self.Removed = [x for x in self.people if x not in self.toBeRemove]
+        
+        for name in self.temporary:
+            if name not in self.people:
+                self.people.append(name)
+        print("People who present", self.people)
 
         cap.release()
         cv2.destroyAllWindows()
