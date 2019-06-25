@@ -55,7 +55,7 @@ for root, dirs, files in os.walk(image_dir):
                 roi = image_array[y:y+h, x:x+w]
                 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
                 equalized = clahe.apply(roi)
-                res = np.hstack((roi, equalized))
+                # res = np.hstack((roi, equalized))
                 # cv2.imshow("Training on image...", cv2.resize(
                 #     res, (600, 500)))
                 # cv2.waitKey(1000)

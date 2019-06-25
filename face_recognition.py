@@ -58,8 +58,7 @@ class FaceRecognition:
 
         while True:
             ret, frame = cap.read()
-            gray = frame
-            # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
             scale = cv2.getTrackbarPos("Scale", "Frame")
             neighbours = cv2.getTrackbarPos("Neighbours", "Frame")
@@ -69,12 +68,12 @@ class FaceRecognition:
 
             for rect in faces:
                 (x, y, w, h) = rect
-                roi = cv2.cvtColor(frame[y:y+h, x:x+w], cv2.COLOR_BGR2GRAY)
+                roi = gray[y:y+h, x:x+w]
                 # roi = cv2.equalizeHist(roi)
                 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
                 roi = clahe.apply(roi)
-                # print(roi.shape)
-                cv2.imshow('show', roi)
+                # cv2.imshow('show', roi)
+                # cv2.waitKey(1000)
                 id_, conf = self.recognizer.predict(
                     cv2.resize(roi, (300, 300)))
 
