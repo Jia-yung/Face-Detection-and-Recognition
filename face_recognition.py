@@ -35,7 +35,7 @@ class FaceRecognition:
     def __init__(self):
         self.face_cascade = cv2.CascadeClassifier(
             "haarcascade_frontalface_default.xml")
-        self.recognizer = cv2.face.EigenFaceRecognizer_create()
+        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
         self.recognizer.read("trainner.yml2")
         self.labels = {}
         self.read_labels()
@@ -77,25 +77,20 @@ class FaceRecognition:
                 id_, conf = self.recognizer.predict(
                     cv2.resize(roi, (300, 300)))
 
-                if conf <= 14000:
+                if conf <= 55:
                    
                     print(id_)
                     print(self.labels[id_])
                     name = self.labels[id_]
-                    
+                    print("%s %s" %(name, conf))
                     self.temporary.append(name)
-                    print(Counter(self.people))
-              
                 else:
                     name = "unknown"
+                    print("Unknown", conf)
                     
                 drawText(frame, name, x, y)
                 drawRectangle(frame, rect)
                     
-            
-                        
-                
-
             image = cv2.resize(frame, (750, 500))
             cv2.imshow("Frame", image)
 
