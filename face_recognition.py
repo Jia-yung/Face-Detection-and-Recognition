@@ -64,7 +64,9 @@ class FaceRecognition:
             for rect in faces:
                 (x, y, w, h) = rect
                 roi = cv2.cvtColor(frame[y:y+h, x:x+w], cv2.COLOR_BGR2GRAY)
-                roi = cv2.equalizeHist(roi)
+                # roi = cv2.equalizeHist(roi)
+                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+                roi = clahe.apply(roi)
                 # print(roi.shape)
                 cv2.imshow('show', roi)
                 id_, conf = self.recognizer.predict(

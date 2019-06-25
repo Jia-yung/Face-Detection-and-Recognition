@@ -53,8 +53,13 @@ for root, dirs, files in os.walk(image_dir):
             for(x, y, w, h) in faces:
                 feature = ()
                 roi = image_array[y:y+h, x:x+w]
-                roi = cv2.equalizeHist(roi)
-                x_train.append(cv2.resize(roi, (300, 300)))
+                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+                equalized = clahe.apply(roi)
+                res = np.hstack((roi, equalized))
+                # cv2.imshow("Training on image...", cv2.resize(
+                #     res, (600, 500)))
+                # cv2.waitKey(1000)
+                x_train.append(cv2.resize(equalized, (300, 300)))
                 y_labels.append(id_)
 
 # print(y_labels)
