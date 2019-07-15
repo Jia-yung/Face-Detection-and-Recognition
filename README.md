@@ -1,7 +1,7 @@
 # Face-Detection-and-Recognition
 Computer Vision assignment
 ## Setup and Installation
-The face detection recognition requires OpenCV and OpenCV contrib python using package manager [pip](https://pip.pypa.io/en/stable/) to install
+The face detection recognition requires OpenCV and OpenCV contrib python. These can be installed using package manager [pip](https://pip.pypa.io/en/stable/) to install
 ```bash
 pip install opencv-python
 ```
