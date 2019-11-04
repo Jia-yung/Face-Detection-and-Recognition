@@ -5,6 +5,7 @@ Created on Sun May 26 22:12:15 2019
 
 @author: jiayungyap
 """
+
 import cv2
 import pickle
 from math import sin, cos, radians
@@ -35,7 +36,7 @@ def rotate_image(image, angle):
     rot_mat = cv2.getRotationMatrix2D((width/2, height/2), angle, 0.9)
     result = cv2.warpAffine(image, rot_mat, (width, height), flags=cv2.INTER_LINEAR)
     return result
-#
+
 def rotate_point(pos, img, angle):
     if angle == 0: return pos
     x = pos[0] - img.shape[1]*0.4
@@ -55,6 +56,8 @@ class FaceRecognition:
         
         #read the file containing all the trained datasets of individuals
         self.recognizer.read("trainner.yml2")
+        
+        #initialise the variables
         self.labels = {}
         self.read_labels()
         self.count = 0
@@ -78,13 +81,17 @@ class FaceRecognition:
         #convert image from rgb to gray scale
         gray = cv2.cvtColor(blurredImg, cv2.COLOR_BGR2GRAY)
         
+        #to detect for faces in certain angle
         for angle in [0, -25, 25]:
-                                                            
+            
+            #perform image transformation of rotated face                                                
             rimg = rotate_image(gray, angle)
             
+            #using haarcascade to detect for the presence of face
             #store the detected face in faces array
             faces = self.face_cascade.detectMultiScale(rimg, 1.5, 5)
             
+            #loop though all the face in faces array
             for face in faces:
                 rotatedFace = [rotate_point(face, gray, -angle)]
                        
@@ -104,7 +111,7 @@ class FaceRecognition:
                     #if the difference in terms of distance is less than the threshold
                     #assign the name of the person to the one that have the closest match in the trained datatset
                     #0 indicates a perfect match
-                    if conf <= 100:
+                    if conf <= 50:
                         
                         print(id_)
                         print(self.labels[id_])
@@ -124,11 +131,12 @@ class FaceRecognition:
                     #draw a bounding rectangle around the detected face
                     drawRectangle(img, rect)
                 
-            #display the output image
+            #display the output image            
             image = cv2.resize(img, (1024, 640))
             cv2.imshow("Frame", image)
-            key = cv2.waitKey(1)
             
+            print("People who present", self.temporary)
+            key = cv2.waitKey(1)            
             if key == 27:
                 break            
     
@@ -162,7 +170,7 @@ class FaceRecognition:
                       
                         id_, conf = self.recognizer.predict(roi)
                         
-                        if conf <= 100:
+                        if conf <= 30:
                            
                             print(id_)
                             print(self.labels[id_])
