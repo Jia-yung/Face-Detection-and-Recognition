@@ -1,5 +1,6 @@
 # Face-Detection-and-Recognition
-Computer Vision assignment
+A face detection and face recognition system using Haar Cascade and Local Binary Pattern Histogram(LBPH) from OpenCV.
+
 ## Setup and Installation
 The face detection recognition requires OpenCV and OpenCV contrib python. These can be installed using package manager [pip](https://pip.pypa.io/en/stable/) to install
 ```bash
